@@ -1,35 +1,31 @@
-import { Component } from '@angular/core';
+
+
+import { Component, inject } from '@angular/core';
 import { IProduct } from '../interface/product';
+import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-product-component',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, HttpClientModule],
   templateUrl: './product-component.component.html',
   styleUrl: './product-component.component.css'
 })
 export class ProductComponentComponent {
-  product: IProduct[] = [
-   {
-    id:1,
-    image:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHDT40pjoi4s8c_ZxfZcgA_WqmM7fsC4KWaw&usqp=CAU',
-    title:'name product1',
-    price:'2000$'
-   },
-
-   {
-    id:2,
-    image:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHDT40pjoi4s8c_ZxfZcgA_WqmM7fsC4KWaw&usqp=CAU',
-    title:'name product2',
-    price:'2000$'
-   },
-
-   {
-    id:3,
-    image:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHDT40pjoi4s8c_ZxfZcgA_WqmM7fsC4KWaw&usqp=CAU',
-    title:'name product3',
-    price:'2000$'
-   },
-
-  ];
+ 
+  products: any;
+  httpClient = inject(HttpClient);
+  ngOnInit(): void {
+    this.getProduct();
+  }
+  getProduct() {
+    this.httpClient.get('https://dummyjson.com/products')
+      .subscribe((response: any) => {
+        console.log(response);
+        console.log(response.products);
+        this.products = response.products;
+      });
+  }
 }
